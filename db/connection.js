@@ -1,5 +1,7 @@
+//import mysql
 const mysql = require('mysql2');
 
+//connect to database
 const db = mysql.createConnection(
     {
         host: 'localHost', 
@@ -10,4 +12,5 @@ const db = mysql.createConnection(
     console.log('Connected to the company database')
 );
 
+//export database 
 module.exports = db;
