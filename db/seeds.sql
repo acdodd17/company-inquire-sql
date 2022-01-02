@@ -21,7 +21,7 @@ VALUES
     ('Marketing Intern', 35000.00, 3),
     ('Sales Manager', 100000.00, 4),
     ('Sales Representative', 75000.00, 4),
-    ('Sales Intern', 35000.00, 4),
+    ('Sales Intern', 35000.00, 4)
 ;
 
 INSERT INTO employees (first_name, last_name, role_id, manager_id)
@@ -39,6 +39,6 @@ VALUES
     ('Colin', 'Creevey', 11, 8),
     ('Rubeus', 'Hagrid', 12, NULL),
     ('Ginny', 'Weasley', 13, 12),
-    ('Dobby', 'Elf', 14, 12),
+    ('Dobby', 'Elf', 14, 12)
 ;
 
