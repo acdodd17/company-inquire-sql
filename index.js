@@ -36,3 +36,56 @@ const start = () => {
         }
     });
 };
+
+// view all departments
+const viewDepartments = () => {
+    const sql = `SELECT * FROM departments`
+    db.query(sql, (err, rows) => {
+        if (err) {
+            throw err; 
+        }
+        printTable(rows);
+        start();
+    });
+};
+
+// view all roles
+const viewRoles = () => {
+    const sql = `SELECT * FROM roles`
+    db.query(sql, (err, rows) => {
+        if (err) {
+            throw err; 
+        }
+        printTable(rows);
+        start();
+    });
+};
+
+// view all employees
+const viewEmployees = () => {
+    const sql = `SELECT e.id, e.first_name, e.last_name,
+                roles.title AS role_title,
+                departments.name AS department,
+                roles.salary AS salary,
+                CONCAT(m.first_name, ' ', m.last_name) AS Manager
+                FROM employees e
+                INNER JOIN roles ON e.role_id = roles.id
+                LEFT JOIN departments on e.role_id = roles.id AND roles.department_id = departments.id
+                LEFT JOIN employees m ON m.id = e.manager_id
+    `
+    db.query(sql, (err, rows) => {
+        if (err) {
+            throw err; 
+        }
+        printTable(rows);
+        start();
+    });
+};
+
+// add a department
+
+// add a role
+
+// add an employee
+
+// update an employee role
