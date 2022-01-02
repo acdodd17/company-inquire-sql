@@ -11,7 +11,7 @@ db.connect(err => {
 
 // start application with offering menu options: [view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role]
 const start = () => {
-    return inquirer.prompt(
+    inquirer.prompt(
         {
             type: 'list', 
             name: 'menu', 
@@ -51,7 +51,9 @@ const viewDepartments = () => {
 
 // view all roles
 const viewRoles = () => {
-    const sql = `SELECT * FROM roles`
+    const sql = `SELECT roles.id, roles.title, roles.salary, departments.name AS department
+                FROM roles
+                INNER JOIN departments ON roles.department_id = departments.id`
     db.query(sql, (err, rows) => {
         if (err) {
             throw err; 
@@ -64,10 +66,10 @@ const viewRoles = () => {
 // view all employees
 const viewEmployees = () => {
     const sql = `SELECT e.id, e.first_name, e.last_name,
-                roles.title AS role_title,
+                roles.title AS role,
                 departments.name AS department,
                 roles.salary AS salary,
-                CONCAT(m.first_name, ' ', m.last_name) AS Manager
+                CONCAT(m.first_name, ' ', m.last_name) AS manager
                 FROM employees e
                 INNER JOIN roles ON e.role_id = roles.id
                 LEFT JOIN departments on e.role_id = roles.id AND roles.department_id = departments.id
@@ -83,9 +85,62 @@ const viewEmployees = () => {
 };
 
 // add a department
+const addDepartment = () => {
+    inquirer. prompt(
+        {
+            type: 'input',
+            name: 'newDepartment', 
+            message: 'What is the name of the department you would like to add?'
+        }
+    ).then(response => {
+
+    })
+    const sql = `
+    `
+    db.query(sql, (err, rows) => {
+        if (err) {
+            throw err; 
+        }
+        viewDepartments();
+        start();
+    });
+};
 
 // add a role
+const addRole = () => {
+    const sql = `
+    `
+    db.query(sql, (err, rows) => {
+        if (err) {
+            throw err; 
+        }
+        viewRoles();
+        start();
+    });
+};
 
 // add an employee
+const addEmployee = () => {
+    const sql = `
+    `
+    db.query(sql, (err, rows) => {
+        if (err) {
+            throw err; 
+        }
+        viewEmployees();
+        start();
+    });
+};
 
 // update an employee role
+const updateEmployee = () => {
+    const sql = `
+    `
+    db.query(sql, (err, rows) => {
+        if (err) {
+            throw err; 
+        }
+        viewEmployees();
+        start();
+    });
+};
