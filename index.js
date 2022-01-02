@@ -93,29 +93,27 @@ const addDepartment = () => {
             message: 'What is the name of the department you would like to add?'
         }
     ).then(response => {
+        const sql = `INSERT INTO departments (name) VALUES (?)`
+        const params = response.newDepartment;
 
-    })
-    const sql = `
-    `
-    db.query(sql, (err, rows) => {
-        if (err) {
-            throw err; 
-        }
-        viewDepartments();
-        start();
+        db.query(sql, params, (err, result) => {
+            if (err) {
+                throw err; 
+            }
+            console.log('New department added!')
+            viewDepartments();
+        });
     });
 };
 
 // add a role
 const addRole = () => {
-    const sql = `
-    `
-    db.query(sql, (err, rows) => {
+    const sql = `INSERT`
+    db.query(sql, (err, result) => {
         if (err) {
             throw err; 
         }
         viewRoles();
-        start();
     });
 };
 
@@ -123,24 +121,28 @@ const addRole = () => {
 const addEmployee = () => {
     const sql = `
     `
-    db.query(sql, (err, rows) => {
+    db.query(sql, (err, result) => {
         if (err) {
             throw err; 
         }
         viewEmployees();
-        start();
     });
 };
 
 // update an employee role
 const updateEmployee = () => {
-    const sql = `
-    `
-    db.query(sql, (err, rows) => {
+    inquirer.prompt(
+        {
+            type: 'input',
+            name: 'employeeName', 
+            message:'What is the name of the employee you would like to update?'
+        }
+    )
+    const sql = `UPDATE employees SET role_id = ? WHERE id = ?`
+    db.query(sql, (err, result) => {
         if (err) {
             throw err; 
         }
         viewEmployees();
-        start();
     });
 };
