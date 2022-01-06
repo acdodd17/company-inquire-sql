@@ -154,9 +154,62 @@ const addRole = () => {
 // add an employee
 const addEmployee = () => {
     // query to get all roles
-    // query to get employees with manager_id null
-    // inquirer prompt new employee first_name, last_name, role from all roles, and manager from list of all managers
-    // query to INSERT into employees : first_name, last_name, role_id, manager_id
+    db.query('SELECT * FROM roles', (err, rows) => {
+        if (err) throw err;
+        const roles = rows.map( role => {
+            return {
+                name: role.title, 
+                value: role.id
+            }
+        })
+        // query to get employees with manager_id null for identifying managers later
+        db.query('SELECT * FROM employees', (err, rows) => {
+            if (err) throw err;
+            const managers = rows.filter( employee => employee.manager_id === null);
+            const managersList = managers.map(manager => {
+                return {
+                    name: manager.first_name + ' ' + manager.last_name, 
+                    value: manager.id
+                }
+            })
+            // inquirer prompt new employee first_name, last_name, role from all roles, and manager from list of all managers
+            inquirer.prompt([
+                {
+                    type: 'input',
+                    name: 'firstName', 
+                    message: 'What is the first name of the new employee?'
+                }, 
+                {
+                    type: 'input',
+                    name: 'lastName', 
+                    message: 'What is the last name of the new employee?'
+                }, 
+                {
+                    type: 'list', 
+                    name: 'title',
+                    message: 'What new title will this employee hold?',
+                    choices: roles
+                }, 
+                {
+                    type: 'list', 
+                    name: 'manager', 
+                    message: 'Who is the manager of the new employee?', 
+                    choices: managersList
+                }
+            ])
+            // query to INSERT into employees : first_name, last_name, role_id, manager_id
+            .then(response => {
+                const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
+                            VALUES (?, ?, ?, ?)`;
+                const params = [response.firstName, response.lastName, response.title, response.manager];
+                db.query(sql, params, (err, result) => {
+                    if (err) throw err; 
+                    console.log('New employee added!');
+                    viewEmployees();
+                })
+            });
+        });
+    });
 };
 
 // update an employee role
