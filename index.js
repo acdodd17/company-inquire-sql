@@ -1,6 +1,10 @@
+//import modules
 const inquirer = require('inquirer');
 const db = require('./db/connection');
 const { printTable } = require('console-table-printer');
+// const departments = require('./departments');
+// const roles = require('./roles');
+// const employees = require('./employees');
 
 // connect to database
 db.connect(err => {
@@ -10,7 +14,7 @@ db.connect(err => {
 })
 
 // start application with offering menu options: [view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role]
-const start = () => {
+start = function() {
     inquirer.prompt(
         {
             type: 'list', 
@@ -45,7 +49,7 @@ const start = () => {
     });
 };
 
-
+// ------------------------ VIEW DATA ------------------------ 
 // view all departments
 const viewDepartments = () => {
     const sql = `SELECT * FROM departments`
@@ -93,6 +97,12 @@ const viewEmployees = () => {
     });
 };
 
+// view total utilized budget of a department 
+const viewBudget = () => {
+
+};
+
+// ------------------------ ADD DATA ------------------------ 
 // add a department
 const addDepartment = () => {
     inquirer. prompt(
@@ -228,54 +238,7 @@ const addEmployee = () => {
     });
 };
 
-// update an employee role
-const updateEmployee = () => {
-    db.query('SELECT * FROM roles', (err, rows) => {
-        if (err) throw err; 
-        const rolesList = rows.map( role => {
-            return {
-                name:role.title, 
-                value: role.id
-            }
-        })
-        db.query('SELECT * FROM employees', (err, rows) => {
-            if (err) throw err;
-            const employeeList = rows.map (employee => {
-                return {
-                    name: employee.first_name + ' ' + employee.last_name, 
-                    value: employee.id
-                }
-            })
-            inquirer.prompt([
-                {
-                    type: 'list',
-                    name: 'employee', 
-                    message:'What is the name of the employee you would like to update?', 
-                    choices: employeeList
-                }, 
-                {
-                    type: 'list', 
-                    name: 'newTitle', 
-                    message: 'What new title will this employee hold?',
-                    choices: rolesList
-                }
-            ])
-            .then(response => {
-                const sql = `UPDATE employees SET role_id = ? WHERE id = ?`
-                const params = [
-                    response.newTitle, 
-                    response.employee
-                ]
-                db.query(sql, params, (err, result) => {
-                    if (err) throw err;
-                    console.log ('Employee role updated!')
-                })
-                viewEmployees();
-            })
-        }); 
-    });
-};
-
+// ------------------------ DELETE DATA ------------------------ 
 // delete department 
 const deleteDepartment = () => {
     // query to get all departments
@@ -347,7 +310,7 @@ const deleteEmployee = () => {
         if (err) throw err; 
         const employeesList = rows.map (employee => {
             return {
-                name: employee.first_name + '' + employee.last_name, 
+                name: employee.first_name + ' ' + employee.last_name, 
                 value: employee.id
             }
         })
@@ -372,9 +335,53 @@ const deleteEmployee = () => {
     });
 };
 
-// view total utilized budget of a department 
-const viewBudget = () => {
-
+// ------------------------ UPDATE EXISTING DATA ------------------------ 
+// update an employee role
+const updateEmployee = () => {
+    db.query('SELECT * FROM roles', (err, rows) => {
+        if (err) throw err; 
+        const rolesList = rows.map( role => {
+            return {
+                name:role.title, 
+                value: role.id
+            }
+        })
+        db.query('SELECT * FROM employees', (err, rows) => {
+            if (err) throw err;
+            const employeeList = rows.map (employee => {
+                return {
+                    name: employee.first_name + ' ' + employee.last_name, 
+                    value: employee.id
+                }
+            })
+            inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'employee', 
+                    message:'What is the name of the employee you would like to update?', 
+                    choices: employeeList
+                }, 
+                {
+                    type: 'list', 
+                    name: 'newTitle', 
+                    message: 'What new title will this employee hold?',
+                    choices: rolesList
+                }
+            ])
+            .then(response => {
+                const sql = `UPDATE employees SET role_id = ? WHERE id = ?`
+                const params = [
+                    response.newTitle, 
+                    response.employee
+                ]
+                db.query(sql, params, (err, result) => {
+                    if (err) throw err;
+                    console.log ('Employee role updated!')
+                })
+                viewEmployees();
+            })
+        }); 
+    });
 };
 
 // update manager 
