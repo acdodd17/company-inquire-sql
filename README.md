@@ -16,7 +16,7 @@ SO THAT I can organize and plan my business.`
 ## USAGE
 With the app installed, run `node index`. Follow the prompts to move through the menu to execute tasks such as `view all departments`, `view all roles`, `view all employees`, add departments, roles or employees, update existing employee roles or delete any department, role or employee. 
 
-![walk through of application](./assets/Company-inquirer-sql.mp4)
+![walk through of application](https://youtu.be/DoJbFqM2A-E)
 
 ## CONTRIBUTION
 Made by Anna 🧡
